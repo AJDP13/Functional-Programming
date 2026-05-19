@@ -27,12 +27,24 @@ myReverse [] = []
 myReverse xs = [(xs !! (length xs - 1))] ++ myReverse (take (length xs -1) xs)
 
 --Problem 6
---Find out whether a list is a palindrom
+--Find out whether a list is a palindrome
 isPalindrome :: (Eq a) => [a] -> Bool
 isPalindrome xs = (reverse xs == xs)
 
 --Problem 7
 --Flatten a nested list structure
 data NestedList a = Elem a | List [NestedList a]
-flatten :: NestedList a -> a
-flatten = undefined
+flatten :: NestedList a -> [a]
+flatten (Elem a) = [a]
+flatten (List [x]) = flatten x
+flatten (List (x:xs)) = flatten x ++ flatten (List xs)
+flatten _ = []
+
+--Problem 8
+--Eliminate consecutive duplicates of list elements
+compress :: Eq a => [a] -> [a]
+compress [] = []
+compress [x] = [x]
+compress (x:y:xs)
+    | (x == y) = compress (y:xs)
+    | otherwise = [x] ++ compress (y:xs)
