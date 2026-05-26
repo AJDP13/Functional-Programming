@@ -48,3 +48,12 @@ compress [x] = [x]
 compress (x:y:xs)
     | (x == y) = compress (y:xs)
     | otherwise = [x] ++ compress (y:xs)
+
+--Problem 9
+--Pack consecutive duplicated of list elements into sublists
+pack :: Eq a => [a] -> [[a]]
+pack [] = []
+pack [x] = [[x]]
+pack (x:y:xs)
+    | (x==y) = [[x,y] ++ pack xs]
+    | otherwise = [[x] ++ pack [y:xs]]
