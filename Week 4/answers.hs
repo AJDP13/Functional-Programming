@@ -55,4 +55,50 @@ split list = [take (length list `div` 2) list, drop (length list `div`2) list]
 
 merge :: Ord a => [a] -> [a] -> [a]
 --Merges two sorted lists of values into a single sorted list
-merge l1 l2 = undefined
+merge [] ys = ys
+merge xs [] = xs
+merge (x:xs) (y:ys)
+    | x <= y = x : merge xs (y:ys)
+    | otherwise = y : merge (x:xs) ys
+
+--List Comprehensions and higher-order functions
+--Exercise 1
+fun :: Num a => (a->a) -> (a->Bool) -> [a] -> [a]
+fun mf ff = filter ff . map mf
+
+--Exercise 2
+myMap :: (a->b) -> [a] -> [b]
+myMap f = foldr (\x acc -> f x : acc) []
+
+myFilter :: (a->Bool) -> [a] -> [a]
+myFilter f = foldr (\x acc -> if f x then x:acc else acc) []
+
+--Exercise 3
+altMap :: (a->b) -> (a->b) -> [a] -> [b]
+altMap _ _ [] = []
+altMap f _ [x] = [f x]
+altMap f g (x:y:xs) = f x : g y : (altMap f g xs)
+
+--Exercise 4 (Hard)
+
+zero :: (a -> a) -> (a -> a)
+zero f x = x
+
+one :: (a -> a) -> (a -> a)
+one f x = f x
+
+two :: (a -> a) -> (a -> a)
+two f x = f (f x)
+
+three :: (a -> a) -> (a -> a)
+three f x = f (f (f x))
+
+
+mult m n = m . n
+add :: ((a->a) -> (a->a)) -> ((a->a) -> (a->a)) -> ((a->a) -> (a->a))
+add m n f x = m f (n f x)
+
+--Define Prelude `Concat` in four different ways
+--Exercise 1 - Using comprehensions + NO recrusion
+concat1 :: [[a]] -> [[a]]
+concat1 xss = [[x | x<-xs] | xs <- xss]
